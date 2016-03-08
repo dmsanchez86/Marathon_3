@@ -1,0 +1,67 @@
+/*
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+*/
+/* 
+    Created on : 7/03/2016, 11:13:39 PM
+    Author     : Mauro
+*/
+
+*{
+    border: 0;
+    margin: 0;
+    padding: 0;
+}
+
+html,
+body{
+    height: 100%;
+    display: block;
+    font-family: Helvetica;
+    font-size: 100%;
+}
+
+label,
+button{
+    cursor: pointer;
+    font-weight: bold;
+}
+
+input[type=text],
+button{
+    border: solid thin #323232;
+    padding: .25rem .8rem;
+    border-radius: 3px;
+}
+
+button{
+    transition: .35s;
+}
+
+button:hover{
+    background-color: #696969;
+    color: white;
+}
+
+.title{
+    background-color: #696969;
+    padding: 1rem;
+    color: white;
+    text-transform: uppercase;
+    font-weight: bold;
+    text-align: center;
+    margin: 0;
+}
+
+.subtitle{
+    color: #696969;
+    text-align: center;
+    padding: 1rem;
+    margin: 0;
+}
+
+.formFindRunner{
+    text-align: center;
+}
+
