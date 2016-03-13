@@ -1,6 +1,7 @@
 package models;
 
 import java.sql.ResultSet;
+import java.sql.SQLException;
 
 /**
  * @author Mao
@@ -8,12 +9,12 @@ import java.sql.ResultSet;
 public class Queries extends Conection{
 
     public String[] getDataRunner(String runner) {
-        String[] dataRunner = new String[2];
+        String[] dataRunner = new String[3];
         try {
             conect();
             
             query = conection.prepareStatement(""
-                    +   "SELECT r.Gender, r.DateOfBirth \n" +
+                    +   "SELECT r.Gender, r.DateOfBirth, r.RunnerId \n" +
                         "FROM runner r \n" +
                         "INNER JOIN user u ON r.Email = u.Email \n" +
                         "WHERE u.FirstName LIKE '%"+runner+"%' OR u.LastName LIKE '%"+runner+"%' LIMIT 1");
@@ -23,6 +24,7 @@ public class Queries extends Conection{
             while(data.next()){
                 dataRunner[0] = data.getString("Gender");
                 dataRunner[1] = data.getString("DateOfBirth");
+                dataRunner[2] = data.getString("RunnerId");
             }
             
             return dataRunner;
@@ -32,21 +34,69 @@ public class Queries extends Conection{
         }
     }
     
-    public ResultSet getDataRunners(String runner) {
+    public String[] getDataCompetititonRunner(String idRunner) {
+        String[] dataRunner = new String[10]; 
+        
         try {
             conect();
             
             query = conection.prepareStatement(""
-                    +   "SELECT et.EventTypeName, e.Cost, e.EventId\n" +
-                        "FROM eventtype et\n" +
-                        "INNER JOIN event e ON e.EventTypeId = et.EventTypeId\n" +
-                        "INNER JOIN marathon m ON e.MarathonId = m.MarathonId\n" +
-                        "WHERE m.MarathonId = 5 ORDER BY e.Cost DESC");
+                    +   "SELECT m.MarathonId, m.CityName, m.YearHeld, et.EventTypeName, et.EventTypeId , re.RaceTime, ru.Email, ru.Gender,ro.RoleId, r.RegistrationId\n" +
+                        "FROM marathon m\n" +
+                        "INNER JOIN event e ON e.MarathonId = m.MarathonId\n" +
+                        "INNER JOIN eventtype et ON e.EventTypeId = et.EventTypeId\n" +
+                        "INNER JOIN registrationevent re ON re.EventId = e.EventId\n" +
+                        "INNER JOIN registration r ON r.RegistrationId = re.RegistrationId\n" +
+                        "INNER JOIN runner ru ON r.RunnerId = ru.RunnerId \n" +
+                        "INNER JOIN user u ON ru.Email = u.Email\n" +
+                        "INNER JOIN role ro ON u.RoleId = ro.RoleId\n" +
+                        "WHERE ru.RunnerId = ?"
+                    + "");
+            query.setInt(1, Integer.parseInt(idRunner));
+            
+            data = query.executeQuery();
+            
+            while(data.next()){
+                dataRunner[0] = data.getString("RegistrationId");
+                dataRunner[1] = data.getString("Gender");
+                dataRunner[2] = data.getString("MarathonId");
+                dataRunner[3] = data.getString("EventTypeId");                
+            }
+            
+            return dataRunner;
+        } catch (SQLException | NumberFormatException e) {
+            System.out.println(e.getMessage());
+            return null;
+        }
+    }
+    
+    public ResultSet getDataAllCompetititonsRunners(String registrationId, String gender, String marathonId, String eventTypeId) {
+        try {
+            conect();
+            
+            query = conection.prepareStatement(""
+                    +   "SELECT m.MarathonId,m.MarathonName,m.CityName, m.YearHeld, et.EventTypeName, et.EventTypeId, re.RaceTime, e.MaxParticipants,rs.RegistrationStatusId, ru.Gender\n" +
+                        "FROM marathon m\n" +
+                        "INNER JOIN event e ON e.MarathonId = m.MarathonId\n" +
+                        "INNER JOIN eventtype et ON e.EventTypeId = et.EventTypeId\n" +
+                        "INNER JOIN registrationevent re ON re.EventId = e.EventId\n" +
+                        "INNER JOIN registration r ON r.RegistrationId = re.RegistrationId\n" +
+                        "INNER JOIN registrationstatus rs ON r.RegistrationStatusId = rs.RegistrationStatusId\n" +
+                        "INNER JOIN runner ru ON r.RunnerId = ru.RunnerId\n" +
+                        "INNER JOIN gender g ON ru.Gender = g.Gender\n" +
+                        "INNER JOIN user u ON ru.Email = u.Email\n" +
+                        "INNER JOIN role ro ON u.RoleId = ro.RoleId\n" +
+                        "WHERE rs.RegistrationStatusId = ? AND ru.Gender = ? AND m.MarathonId = ? AND et.EventTypeId = ?"
+                    + "");
+            query.setString(1, registrationId);
+            query.setString(2, gender);
+            query.setString(3, marathonId);
+            query.setString(4, eventTypeId);
             
             data = query.executeQuery();
             
             return data;
-        } catch (Exception e) {
+        } catch (SQLException | NumberFormatException e) {
             System.out.println(e.getMessage());
             return null;
         }
@@ -73,5 +123,20 @@ public class Queries extends Conection{
         }else{
             return "more than 70";
         }
+    }
+    
+    public String formatRaceTime(String raceTime){ 
+        // validate if the time is not null
+        if(raceTime == null || raceTime == "NULL"){
+            return "0";
+        }
+        
+        int time = Integer.parseInt(raceTime);
+        
+        int hours = time / 3600;
+        int minutes = (time - (hours * 3600)) / (60);
+        int seconds = (time) - ((hours * 3600) + (minutes * 60));
+        
+        return hours+"<b>H</b> "+minutes+"<b>M</b> "+seconds+"<b>S</b>" ;
     }
 }

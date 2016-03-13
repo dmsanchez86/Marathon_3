@@ -29,7 +29,7 @@ boolean stateConection = conection.conect(); // get state conection
                 <h2 class="subtitle">Runner Results</h2>
                 <form action="" method="POST" class="formFindRunner">
                     <label for="nameRunner">Name</label>
-                    <input id="nameRunner" type="text" name="nameRunner" required>
+                    <input id="nameRunner" type="text" name="nameRunner" placeholder="Name or LastName" required>
                     <button type="submit" name="btnFind">Find</button>
                 </form>
                 <div class="center">
@@ -48,18 +48,54 @@ boolean stateConection = conection.conect(); // get state conection
                 String nameRunner = request.getParameter("nameRunner");
                 
                 String[] dataRunner = q.getDataRunner(nameRunner);
-                ResultSet dataRunners = q.getDataRunners(nameRunner);
-            
+                boolean table = false;
+                
+                String idRunner = dataRunner[2];
+                
                 if(dataRunner.length > 0 || dataRunner != null){ %>
                     <div class="resultMarathon">
                     <% if(dataRunner[0] == null && dataRunner[1] == null){ %>
                         <div class="center mid-padding">
                             <b>No found data</b>
                         </div>   
-                    <% }else { %>
+                    <% }else { 
+                        table = true;
+                        
+                        String gender = dataRunner[0];
+                        String dateOfBirth = dataRunner[1];
+                    %>
                         <div class="center mid-padding">
-                            <b>Gender: </b> <span><%= dataRunner[0] %></span>&nbsp;&nbsp;<b>Category: </b> <span><%= q.calculateCategory(dataRunner[1]) %></span>
+                            <b>Gender: </b> <span><%= gender %></span>&nbsp;&nbsp;<b>Category: </b> <span><%= q.calculateCategory(dateOfBirth) %></span>
                         </div>
+                    <% } 
+                    
+                    
+                    String[] informationUser = q.getDataCompetititonRunner(idRunner);
+                    ResultSet dataRunners = q.getDataAllCompetititonsRunners(informationUser[0], informationUser[1], informationUser[2], informationUser[3]);
+                    
+                    if(table){ %>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Marathon</th>
+                                    <th>Event</th>
+                                    <th>Time</th>
+                                    <th>General Place</th>
+                                    <th>Category Place</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <% while(dataRunners.next()){ %>
+                                    <tr>
+                                        <td><%= dataRunners.getString("YearHeld")+" "+dataRunners.getString("CityName") %></td>
+                                        <td><%= dataRunners.getString("EventTypeName") %></td>
+                                        <td><%= q.formatRaceTime(dataRunners.getString("RaceTime")) %></td>
+                                        <td></td>
+                                        <td></td>
+                                    </tr>
+                                <% } %>
+                            </tbody>
+                        </table>
                     <% } %>
                     </div>
                 <% }

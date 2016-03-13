@@ -59,6 +59,15 @@ footer{
     width: 100%;
 }
 
+tr{
+    border-bottom: solid thin #323232;
+}
+
+th,td{
+    padding: .5rem 1rem;
+    text-align: center;
+}
+
 .title{
     background-color: #696969;
     padding: 1rem;
@@ -89,3 +98,8 @@ footer{
     padding: .5rem;
 }
 
+.resultMarathon table{
+    max-width: 100%;
+    width: 800px;
+    margin: .5rem auto;
+}
