@@ -71,7 +71,15 @@ boolean stateConection = conection.conect(); // get state conection
                     
                     
                     String[] informationUser = q.getDataCompetititonRunner(idRunner);
+                    
+                    out.println(informationUser[0]);
+                    out.println(informationUser[1]);
+                    out.println(informationUser[2]);
+                    out.println(informationUser[3]);
+                    
                     ResultSet dataRunners = q.getDataAllCompetititonsRunners(informationUser[0], informationUser[1], informationUser[2], informationUser[3]);
+                    
+                    out.print(dataRunners.first());
                     
                     if(table){ %>
                         <table>

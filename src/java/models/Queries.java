@@ -88,9 +88,9 @@ public class Queries extends Conection{
                         "INNER JOIN role ro ON u.RoleId = ro.RoleId\n" +
                         "WHERE rs.RegistrationStatusId = ? AND ru.Gender = ? AND m.MarathonId = ? AND et.EventTypeId = ?"
                     + "");
-            query.setString(1, registrationId);
+            query.setInt(1, Integer.parseInt(registrationId));
             query.setString(2, gender);
-            query.setString(3, marathonId);
+            query.setInt(3, Integer.parseInt(marathonId));
             query.setString(4, eventTypeId);
             
             data = query.executeQuery();

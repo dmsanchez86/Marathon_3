@@ -57,6 +57,13 @@ footer{
     text-align: center;
     padding: 1rem;
     width: 100%;
+    background: white;
+}
+
+img{
+    max-width: 100%;
+    width: auto;
+    height: auto;
 }
 
 tr{
@@ -66,6 +73,23 @@ tr{
 th,td{
     padding: .5rem 1rem;
     text-align: center;
+}
+
+main{
+    margin-top: 1.5rem;
+}
+
+main section{
+    display: inline-block;
+    vertical-align: top;
+}
+
+main section:last-child{
+    width: calc(100% / 2 - 10%);
+}
+
+main section:first-child{
+    width: calc(100% / 2 + 10% - 1rem);
 }
 
 .title{
@@ -102,4 +126,107 @@ th,td{
     max-width: 100%;
     width: 800px;
     margin: .5rem auto;
+}
+
+.container-img{
+    width: 450px;
+    max-width: 100%;
+    padding: .35rem;
+    border-radius: 5px;
+    margin: .5rem auto;
+}
+
+.container-img img{
+    border-radius: 5px;
+}
+
+.tabs{
+    list-style: none;
+    border: solid #323232 thin;
+    display: inline-block;
+    border-bottom-color: transparent;
+    position: relative;
+    top: 2px;
+    z-index: 12;
+    background: white;
+}
+
+.tabs li{
+    display: inline-block;
+    padding: .5rem 1rem;
+    cursor: pointer;
+    font-weight: bold;
+    color: #323232;
+    transition: all .35s ease;
+    border-bottom: solid thin #323232;
+    background: #f3f3f3;
+}
+
+.tabs li:not(.active):last-child{
+    border-left: solid thin #323232;
+}
+
+.tabs li:not(.active):first-child{
+    border-right: solid thin #323232;
+}
+
+.tabs li.active{
+    border-bottom-color: transparent; 
+    background: white;
+}
+
+.tabs li:hover{
+    color: #000;
+}
+
+.container-tabs{
+    position: relative;
+    padding: .5rem;
+    border: solid thin #323232;
+}
+
+.container-tabs .tab{
+    position: relative;
+    top: 0;
+    left: 0;
+    display: none;
+} 
+
+.container-tabs .tab.active{
+    display: block;
+}
+
+.item{
+    cursor: pointer;
+    margin: .15rem;
+    padding: .65rem;
+    border-radius: 4px;
+}
+
+.item.active,
+.item:hover{
+    background: #f3f3f3;
+}
+
+.item img,
+.item label{
+    display: inline-block;
+    vertical-align: middle;
+}
+
+.item img{
+    width: calc(100% / 2 - 30%);
+}
+
+.item label{
+    width: calc(100% / 2 + 30% - 1rem);
+    text-indent: 15px;
+}
+
+.transparent{
+    background: transparent;
+}
+
+.description-element{
+    font-size: 1.2em;
 }
